@@ -1,27 +1,40 @@
-/*
+
 package com.santhosh.S3demoApp.controller;
 
-import org.springframework.web.bind.annotation.RestController;
+import com.santhosh.S3demoApp.service.S3Service;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 @RestController
+@RequestMapping("/s3")
 public class S3Controller {
+    private final S3Service s3Service;
 
-    @Autowired
-    private S3Service s3Service;
-
-    @PostMapping("/upload")
-    public ResponseEntity<String> upload(@RequestParam("file") MultipartFile file) throws IOException, IOException {
-        s3Service.uploadFile(file);
-        return ResponseEntity.ok("File uploaded successfully!");
+    public S3Controller(S3Service s3Service) {
+        this.s3Service = s3Service;
     }
 
-    @GetMapping("/download/{filename}")
-    public ResponseEntity<byte[]> download(@PathVariable String filename) {
-        byte[] data = s3Service.downloadFile(filename);
+    @PostMapping("/upload")
+    public String upload(@RequestParam("file") MultipartFile file) {
+        try {
+            s3Service.uploadFile(file);
+            return "File uploaded" + file.getOriginalFilename();
+        } catch (Exception e) {
+            return "Error uploading file" + e.getMessage();
+        }
+    }
+
+    @GetMapping("/download/{fileName}")
+    public ResponseEntity<byte[]> download(@PathVariable("fileName") String fileName) {
+        byte[] file = s3Service.downloadFile(fileName);
         return ResponseEntity.ok()
-                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + filename)
-                .body(data);
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + fileName + "\"")
+                .contentType(MediaType.APPLICATION_OCTET_STREAM)
+                .body(file);
     }
 
 }
-*/
+

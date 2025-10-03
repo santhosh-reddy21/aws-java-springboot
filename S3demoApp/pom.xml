@@ -40,11 +40,18 @@
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
-        <!-- https://mvnrepository.com/artifact/com.amazonaws/aws-java-sdk -->
+        <!-- AWS SDK v2 for S3 -->
         <dependency>
             <groupId>software.amazon.awssdk</groupId>
             <artifactId>s3</artifactId>
-            <version>2.20.0</version> <!-- You can use latest stable -->
+            <version>2.20.0</version> <!-- use latest stable -->
+        </dependency>
+
+        <!-- For credentials (auth providers) -->
+        <dependency>
+            <groupId>software.amazon.awssdk</groupId>
+            <artifactId>auth</artifactId>
+            <version>2.20.0</version>
         </dependency>
 
     </dependencies>
